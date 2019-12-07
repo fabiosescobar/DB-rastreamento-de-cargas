@@ -330,7 +330,3 @@ INSERT INTO ROTA_CARGA (cod_rota, cod_carga) VALUES
 	((SELECT codigo FROM ROTA WHERE (cidade_origem= (SELECT codigo FROM CIDADE WHERE (nome ='Recife' AND uf='PE'))AND cidade_destino= (SELECT codigo FROM CIDADE WHERE (nome ='salvador' AND uf='BA')))),(SELECT codigo FROM CARGA WHERE (nro_cte='12246' AND cod_contrato=(SELECT codigo FROM CONTRATO WHERE cod_cliente = (SELECT codigo FROM CLIENTE WHERE razao_social='Transportadora É Pra Ontem Ltda' ))))),
 	((SELECT codigo FROM ROTA WHERE (cidade_origem= (SELECT codigo FROM CIDADE WHERE (nome ='Recife' AND uf='PE'))AND cidade_destino= (SELECT codigo FROM CIDADE WHERE (nome ='Fortaleza' AND uf='CE')))),(SELECT codigo FROM CARGA WHERE (nro_cte='12281' AND cod_contrato=(SELECT codigo FROM CONTRATO WHERE cod_cliente = (SELECT codigo FROM CLIENTE WHERE razao_social='Transportadora É Pra Ontem Ltda' )))))
 	;
-
-
-
-	
