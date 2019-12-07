@@ -1,5 +1,5 @@
-CREATE DATABASE RASTR_CARGAS;
-USE RASTR_CARGAS;
+CREATE DATABASE G2CARGAS;
+USE G2CARGAS;
 CREATE TABLE CLIENTE (
 	codigo INT PRIMARY KEY AUTO_INCREMENT,
 	razao_social VARCHAR(45) NOT NULL,
@@ -107,8 +107,8 @@ INSERT INTO CONTRATO (data_inicial, data_final, valor, cod_cliente) VALUES
 	;
 
 INSERT INTO CARGA (nro_cte, cod_contrato) VALUES
-	('44583', (SELECT codigo FROM CONTRATO WHERE (cod_cliente = (SELECT codigo FROM CLIENTE WHERE razao_social='Arroz Parbo LTDA'))),
-	('44622', (SELECT codigo FROM CONTRATO WHERE (cod_cliente = (SELECT codigo FROM CLIENTE WHERE razao_social='Arroz Parbo LTDA'))),
+	('44583', (SELECT codigo FROM CONTRATO WHERE cod_cliente = (SELECT codigo FROM CLIENTE WHERE razao_social='Arroz Parbo LTDA'))),
+	('44622', (SELECT codigo FROM CONTRATO WHERE cod_cliente = (SELECT codigo FROM CLIENTE WHERE razao_social='Arroz Parbo LTDA'))),
 	('2561', (SELECT codigo FROM CONTRATO WHERE cod_cliente = (SELECT codigo FROM CLIENTE WHERE razao_social='Cerâmica Brilhante LTDA'))),
 	('2566', (SELECT codigo FROM CONTRATO WHERE cod_cliente = (SELECT codigo FROM CLIENTE WHERE razao_social='Cerâmica Brilhante LTDA'))),
 	('2571', (SELECT codigo FROM CONTRATO WHERE cod_cliente = (SELECT codigo FROM CLIENTE WHERE razao_social='Cerâmica Brilhante LTDA'))),
@@ -119,7 +119,7 @@ INSERT INTO CARGA (nro_cte, cod_contrato) VALUES
 	('9782', (SELECT codigo FROM CONTRATO WHERE cod_cliente = (SELECT codigo FROM CLIENTE WHERE razao_social='A Jato Transportes LTDA'))),
 	('9799', (SELECT codigo FROM CONTRATO WHERE cod_cliente = (SELECT codigo FROM CLIENTE WHERE razao_social='A Jato Transportes LTDA'))),
 	('12246', (SELECT codigo FROM CONTRATO WHERE cod_cliente = (SELECT codigo FROM CLIENTE WHERE razao_social='Transportadora É Pra Ontem Ltda'))),
-	('12281', (SELECT codigo FROM CONTRATO WHERE cod_cliente = (SELECT codigo FROM CLIENTE WHERE razao_social='Transportadora É Pra Ontem Ltda'))),
+	('12281', (SELECT codigo FROM CONTRATO WHERE cod_cliente = (SELECT codigo FROM CLIENTE WHERE razao_social='Transportadora É Pra Ontem Ltda')))
 	;
 
 INSERT INTO MOTORISTA (nome, nro_cnh, categoria, data_nascimento) VALUES 
@@ -157,7 +157,7 @@ INSERT INTO EVENTO (data_hora, tipo, descricao) VALUES
 	('2018-04-19 10:15:00','Previsto','Entrega da mercadoria'),
 	('2018-04-22 08:15:00','Previsto','Início do percurso'),
 	('2018-04-22 11:50:00','Imprevisto','Acidente sem gravidade'),
-	('2018-04-22 14:05:00','Repouso','Repouso'),
+	('2018-04-22 14:05:00','Previsto','Repouso'),
 	('2018-04-22 17:20:00','Previsto','Abastecimento'),
 	('2018-04-22 21:05:00','Previsto','Repouso'),
 	('2018-04-23 08:35:00','Previsto','Entrega da mercadoria'),
@@ -231,13 +231,11 @@ INSERT INTO ROTA (distancia, duracao, cidade_origem, cidade_destino) VALUES
 	('440','05:30:00',(SELECT codigo FROM CIDADE WHERE (nome='São Paulo' AND uf='SP')), (SELECT codigo FROM CIDADE WHERE (nome='Rio de Janeiro' AND uf='RJ'))),
 	('440','06:20:00',(SELECT codigo FROM CIDADE WHERE (nome='Rio de Janeiro' AND uf='RJ')), (SELECT codigo FROM CIDADE WHERE (nome='Belo Horizonte' AND uf='MG'))),
 	('1135','13:50:00',(SELECT codigo FROM CIDADE WHERE (nome='Rio de Janeiro' AND uf='RJ')), (SELECT codigo FROM CIDADE WHERE (nome='Florianópolis' AND uf='SC'))),
-	('433','05:20:00',(SELECT codigo FROM CIDADE WHERE (nome='Rio de Janeiro' AND uf='RJ')), (SELECT codigo FROM CIDADE WHERE (nome='São Paulo' AND uf='SP'))),
 	('810','11:50:00',(SELECT codigo FROM CIDADE WHERE (nome='Recife' AND uf='PE')), (SELECT codigo FROM CIDADE WHERE (nome='Salvador' AND uf='BA'))),
 	('800','10:45:00',(SELECT codigo FROM CIDADE WHERE (nome='Recife' AND uf='PE')), (SELECT codigo FROM CIDADE WHERE (nome='Fortaleza' AND uf='CE')))
 	;
 
 INSERT INTO MOTORISTA_CARGA (cod_motorista,cod_carga) VALUES
-	
 	((SELECT codigo FROM MOTORISTA WHERE (nome='Juremir Quaresma' AND nro_cnh= '00254558140')), (SELECT codigo FROM CARGA WHERE (nro_cte='44583' AND cod_contrato=(SELECT codigo FROM CONTRATO WHERE cod_cliente = (SELECT codigo FROM CLIENTE WHERE razao_social='Arroz Parbo LTDA' ))))),
 	((SELECT codigo FROM MOTORISTA WHERE (nome='Sandoval Brandão' AND nro_cnh= '01502334208')), (SELECT codigo FROM CARGA WHERE (nro_cte='44622' AND cod_contrato=(SELECT codigo FROM CONTRATO WHERE cod_cliente = (SELECT codigo FROM CLIENTE WHERE razao_social='Arroz Parbo LTDA'))))),
 	((SELECT codigo FROM MOTORISTA WHERE (nome='Adamastor Botelho' AND nro_cnh= '00278118404')), (SELECT codigo FROM CARGA WHERE (nro_cte='2561' AND cod_contrato=(SELECT codigo FROM CONTRATO WHERE cod_cliente = (SELECT codigo FROM CLIENTE WHERE razao_social='Cerâmica Brilhante LTDA'))))),
@@ -250,7 +248,7 @@ INSERT INTO MOTORISTA_CARGA (cod_motorista,cod_carga) VALUES
 	((SELECT codigo FROM MOTORISTA WHERE (nome='Florentino de Almeida Sampaio'AND nro_cnh= '03052246092')), (SELECT codigo FROM CARGA WHERE (nro_cte='9782' AND cod_contrato=(SELECT codigo FROM CONTRATO WHERE cod_cliente = (SELECT codigo FROM CLIENTE WHERE razao_social='A Jato Transportes LTDA'))))),
 	((SELECT codigo FROM MOTORISTA WHERE (nome='Jacques dos Santos Alves' AND nro_cnh= '02995610045')), (SELECT codigo FROM CARGA WHERE (nro_cte='9799' AND cod_contrato=(SELECT codigo FROM CONTRATO WHERE cod_cliente = (SELECT codigo FROM CLIENTE WHERE razao_social='A Jato Transportes LTDA'))))),
 	((SELECT codigo FROM MOTORISTA WHERE (nome='Juvêncio Fontana Barbosa' AND nro_cnh= '00144284394')), (SELECT codigo FROM CARGA WHERE (nro_cte='12246' AND cod_contrato=(SELECT codigo FROM CONTRATO WHERE cod_cliente = (SELECT codigo FROM CLIENTE WHERE razao_social='Transportadora É Pra Ontem Ltda'))))),
-	((SELECT codigo FROM MOTORISTA WHERE (nome='José Carlos Torrentini' AND nro_cnh= '03041807211')), (SELECT codigo FROM CARGA WHERE (nro_cte='12281' AND cod_contrato=(SELECT codigo FROM CONTRATO WHERE cod_cliente = (SELECT codigo FROM CLIENTE WHERE razao_social='Transportadora É Pra Ontem Ltda'))))),
+	((SELECT codigo FROM MOTORISTA WHERE (nome='José Carlos Torrentini' AND nro_cnh= '03041807211')), (SELECT codigo FROM CARGA WHERE (nro_cte='12281' AND cod_contrato=(SELECT codigo FROM CONTRATO WHERE cod_cliente = (SELECT codigo FROM CLIENTE WHERE razao_social='Transportadora É Pra Ontem Ltda')))))
 	;
 
 INSERT INTO EVENTO_CARGA (cod_evento,cod_carga) VALUES
@@ -298,5 +296,37 @@ INSERT INTO EVENTO_CARGA (cod_evento,cod_carga) VALUES
 	('42', (SELECT codigo FROM CARGA WHERE (nro_cte='12281' AND cod_contrato=(SELECT codigo FROM CONTRATO WHERE cod_cliente = (SELECT codigo FROM CLIENTE WHERE razao_social='Transportadora É Pra Ontem Ltda'))))),
 	('43', (SELECT codigo FROM CARGA WHERE (nro_cte='12281' AND cod_contrato=(SELECT codigo FROM CONTRATO WHERE cod_cliente = (SELECT codigo FROM CLIENTE WHERE razao_social='Transportadora É Pra Ontem Ltda'))))),
 	('44', (SELECT codigo FROM CARGA WHERE (nro_cte='12281' AND cod_contrato=(SELECT codigo FROM CONTRATO WHERE cod_cliente = (SELECT codigo FROM CLIENTE WHERE razao_social='Transportadora É Pra Ontem Ltda'))))),
-	('45', (SELECT codigo FROM CARGA WHERE (nro_cte='12281' AND cod_contrato=(SELECT codigo FROM CONTRATO WHERE cod_cliente = (SELECT codigo FROM CLIENTE WHERE razao_social='Transportadora É Pra Ontem Ltda'))))),
+	('45', (SELECT codigo FROM CARGA WHERE (nro_cte='12281' AND cod_contrato=(SELECT codigo FROM CONTRATO WHERE cod_cliente = (SELECT codigo FROM CLIENTE WHERE razao_social='Transportadora É Pra Ontem Ltda')))))
+	;
+
+INSERT INTO VEICULO_CARGA (cod_veiculo, cod_carga) VALUES
+	((SELECT codigo FROM VEICULO WHERE placa = 'IJT1588'),(SELECT codigo FROM CARGA WHERE (nro_cte='44583' AND cod_contrato=(SELECT codigo FROM CONTRATO WHERE cod_cliente = (SELECT codigo FROM CLIENTE WHERE razao_social='Arroz Parbo LTDA' ))))),
+	((SELECT codigo FROM VEICULO WHERE placa = 'ILM2132'),(SELECT codigo FROM CARGA WHERE (nro_cte='44622' AND cod_contrato=(SELECT codigo FROM CONTRATO WHERE cod_cliente = (SELECT codigo FROM CLIENTE WHERE razao_social='Arroz Parbo LTDA' ))))),
+	((SELECT codigo FROM VEICULO WHERE placa = 'FMU8711'),(SELECT codigo FROM CARGA WHERE (nro_cte='2561' AND cod_contrato=(SELECT codigo FROM CONTRATO WHERE cod_cliente = (SELECT codigo FROM CLIENTE WHERE razao_social='Cerâmica Brilhante LTDA' ))))),
+	((SELECT codigo FROM VEICULO WHERE placa = 'FKK9012'),(SELECT codigo FROM CARGA WHERE (nro_cte='2566' AND cod_contrato=(SELECT codigo FROM CONTRATO WHERE cod_cliente = (SELECT codigo FROM CLIENTE WHERE razao_social='Cerâmica Brilhante LTDA' ))))),
+	((SELECT codigo FROM VEICULO WHERE placa = 'FMU8711'),(SELECT codigo FROM CARGA WHERE (nro_cte='2571' AND cod_contrato=(SELECT codigo FROM CONTRATO WHERE cod_cliente = (SELECT codigo FROM CLIENTE WHERE razao_social='Cerâmica Brilhante LTDA' ))))),
+	((SELECT codigo FROM VEICULO WHERE placa = 'TPL4471'),(SELECT codigo FROM CARGA WHERE (nro_cte='30050' AND cod_contrato=(SELECT codigo FROM CONTRATO WHERE cod_cliente = (SELECT codigo FROM CLIENTE WHERE razao_social='Ágata Transps e Logística SA' ))))),
+	((SELECT codigo FROM VEICULO WHERE placa = 'TSF6336'),(SELECT codigo FROM CARGA WHERE (nro_cte='30085'AND cod_contrato=(SELECT codigo FROM CONTRATO WHERE cod_cliente = (SELECT codigo FROM CLIENTE WHERE razao_social='Ágata Transps e Logística SA' ))))),
+	((SELECT codigo FROM VEICULO WHERE placa = 'TPL4471'),(SELECT codigo FROM CARGA WHERE (nro_cte='30111' AND cod_contrato=(SELECT codigo FROM CONTRATO WHERE cod_cliente = (SELECT codigo FROM CLIENTE WHERE razao_social='Ágata Transps e Logística SA' ))))),
+	((SELECT codigo FROM VEICULO WHERE placa = 'BHH1254'),(SELECT codigo FROM CARGA WHERE (nro_cte='9744' AND cod_contrato=(SELECT codigo FROM CONTRATO WHERE cod_cliente = (SELECT codigo FROM CLIENTE WHERE razao_social='A Jato Transportes LTDA' ))))),
+	((SELECT codigo FROM VEICULO WHERE placa = 'BNV8874'),(SELECT codigo FROM CARGA WHERE (nro_cte='9782' AND cod_contrato=(SELECT codigo FROM CONTRATO WHERE cod_cliente = (SELECT codigo FROM CLIENTE WHERE razao_social='A Jato Transportes LTDA' ))))),
+	((SELECT codigo FROM VEICULO WHERE placa = 'BHH1254'),(SELECT codigo FROM CARGA WHERE (nro_cte='9799' AND cod_contrato=(SELECT codigo FROM CONTRATO WHERE cod_cliente = (SELECT codigo FROM CLIENTE WHERE razao_social='A Jato Transportes LTDA' ))))),
+	((SELECT codigo FROM VEICULO WHERE placa = 'GTT1006'),(SELECT codigo FROM CARGA WHERE (nro_cte='12246' AND cod_contrato=(SELECT codigo FROM CONTRATO WHERE cod_cliente = (SELECT codigo FROM CLIENTE WHERE razao_social='Transportadora É Pra Ontem Ltda'))))),
+	((SELECT codigo FROM VEICULO WHERE placa = 'GVB8863'),(SELECT codigo FROM CARGA WHERE (nro_cte='12281' AND cod_contrato=(SELECT codigo FROM CONTRATO WHERE cod_cliente = (SELECT codigo FROM CLIENTE WHERE razao_social='Transportadora É Pra Ontem Ltda')))))
+	;
+
+INSERT INTO ROTA_CARGA (cod_rota, cod_carga) VALUES
+	((SELECT codigo FROM ROTA WHERE (cidade_origem= (SELECT codigo FROM CIDADE WHERE (nome ='Camaquã' AND uf='RS'))AND cidade_destino= (SELECT codigo FROM CIDADE WHERE (nome ='Porto Alegre' AND uf='RS')))),(SELECT codigo FROM CARGA WHERE (nro_cte='44583' AND cod_contrato=(SELECT codigo FROM CONTRATO WHERE cod_cliente = (SELECT codigo FROM CLIENTE WHERE razao_social='Arroz Parbo LTDA' ))))),
+	((SELECT codigo FROM ROTA WHERE (cidade_origem= (SELECT codigo FROM CIDADE WHERE (nome ='Camaquã' AND uf='RS'))AND cidade_destino= (SELECT codigo FROM CIDADE WHERE (nome ='Canoas' AND uf='RS')))),(SELECT codigo FROM CARGA WHERE (nro_cte='44622' AND cod_contrato=(SELECT codigo FROM CONTRATO WHERE cod_cliente = (SELECT codigo FROM CLIENTE WHERE razao_social='Arroz Parbo LTDA' ))))),
+	((SELECT codigo FROM ROTA WHERE (cidade_origem= (SELECT codigo FROM CIDADE WHERE (nome ='Criciúma' AND uf='SC'))AND cidade_destino= (SELECT codigo FROM CIDADE WHERE (nome ='Porto Alegre' AND uf='RS')))),(SELECT codigo FROM CARGA WHERE (nro_cte='2561' AND cod_contrato=(SELECT codigo FROM CONTRATO WHERE cod_cliente = (SELECT codigo FROM CLIENTE WHERE razao_social='Cerâmica Brilhante LTDA' ))))),
+	((SELECT codigo FROM ROTA WHERE (cidade_origem= (SELECT codigo FROM CIDADE WHERE (nome ='Criciúma' AND uf='SC'))AND cidade_destino= (SELECT codigo FROM CIDADE WHERE (nome ='Florianópolis' AND uf='SC')))),(SELECT codigo FROM CARGA WHERE (nro_cte='2566' AND cod_contrato=(SELECT codigo FROM CONTRATO WHERE cod_cliente = (SELECT codigo FROM CLIENTE WHERE razao_social='Cerâmica Brilhante LTDA' ))))),
+	((SELECT codigo FROM ROTA WHERE (cidade_origem= (SELECT codigo FROM CIDADE WHERE (nome ='Criciúma' AND uf='SC'))AND cidade_destino= (SELECT codigo FROM CIDADE WHERE (nome ='São Paulo' AND uf='RS')))),(SELECT codigo FROM CARGA WHERE (nro_cte='2571' AND cod_contrato=(SELECT codigo FROM CONTRATO WHERE cod_cliente = (SELECT codigo FROM CLIENTE WHERE razao_social='Cerâmica Brilhante LTDA' ))))),
+	((SELECT codigo FROM ROTA WHERE (cidade_origem= (SELECT codigo FROM CIDADE WHERE (nome ='São Paulo' AND uf='SP'))AND cidade_destino= (SELECT codigo FROM CIDADE WHERE (nome ='Porto Alegre' AND uf='RS')))),(SELECT codigo FROM CARGA WHERE (nro_cte='30050' AND cod_contrato=(SELECT codigo FROM CONTRATO WHERE cod_cliente = (SELECT codigo FROM CLIENTE WHERE razao_social='Ágata Transps e Logística SA' ))))),
+	((SELECT codigo FROM ROTA WHERE (cidade_origem= (SELECT codigo FROM CIDADE WHERE (nome ='São Paulo' AND uf='SP'))AND cidade_destino= (SELECT codigo FROM CIDADE WHERE (nome ='Florianópolis' AND uf='SC')))),(SELECT codigo FROM CARGA WHERE (nro_cte='30085' AND cod_contrato=(SELECT codigo FROM CONTRATO WHERE cod_cliente = (SELECT codigo FROM CLIENTE WHERE razao_social='Ágata Transps e Logística SA' ))))),
+	((SELECT codigo FROM ROTA WHERE (cidade_origem= (SELECT codigo FROM CIDADE WHERE (nome ='São Paulo' AND uf='SP'))AND cidade_destino= (SELECT codigo FROM CIDADE WHERE (nome ='Rio de Janeiro' AND uf='RJ')))),(SELECT codigo FROM CARGA WHERE (nro_cte='30111' AND cod_contrato=(SELECT codigo FROM CONTRATO WHERE cod_cliente = (SELECT codigo FROM CLIENTE WHERE razao_social='Ágata Transps e Logística SA' ))))),
+	((SELECT codigo FROM ROTA WHERE (cidade_origem= (SELECT codigo FROM CIDADE WHERE (nome ='Rio de Janeiro' AND uf='RJ'))AND cidade_destino= (SELECT codigo FROM CIDADE WHERE (nome ='Belo Horizonte' AND uf='MG')))),(SELECT codigo FROM CARGA WHERE (nro_cte='9744' AND cod_contrato=(SELECT codigo FROM CONTRATO WHERE cod_cliente = (SELECT codigo FROM CLIENTE WHERE razao_social='A Jato Transportes LTDA' ))))),
+	((SELECT codigo FROM ROTA WHERE (cidade_origem= (SELECT codigo FROM CIDADE WHERE (nome ='Rio de Janeiro' AND uf='RJ'))AND cidade_destino= (SELECT codigo FROM CIDADE WHERE (nome ='Florianópolis' AND uf='SC')))),(SELECT codigo FROM CARGA WHERE (nro_cte='9782' AND cod_contrato=(SELECT codigo FROM CONTRATO WHERE cod_cliente = (SELECT codigo FROM CLIENTE WHERE razao_social='A Jato Transportes LTDA' ))))),
+	((SELECT codigo FROM ROTA WHERE (cidade_origem= (SELECT codigo FROM CIDADE WHERE (nome ='Rio de Janeiro' AND uf='RJ'))AND cidade_destino= (SELECT codigo FROM CIDADE WHERE (nome ='Belo Horizonte' AND uf='MG')))),(SELECT codigo FROM CARGA WHERE (nro_cte='9799' AND cod_contrato=(SELECT codigo FROM CONTRATO WHERE cod_cliente = (SELECT codigo FROM CLIENTE WHERE razao_social='A Jato Transportes LTDA' ))))),
+	((SELECT codigo FROM ROTA WHERE (cidade_origem= (SELECT codigo FROM CIDADE WHERE (nome ='Recife' AND uf='PE'))AND cidade_destino= (SELECT codigo FROM CIDADE WHERE (nome ='salvador' AND uf='BA')))),(SELECT codigo FROM CARGA WHERE (nro_cte='12246' AND cod_contrato=(SELECT codigo FROM CONTRATO WHERE cod_cliente = (SELECT codigo FROM CLIENTE WHERE razao_social='Transportadora É Pra Ontem Ltda' ))))),
+	((SELECT codigo FROM ROTA WHERE (cidade_origem= (SELECT codigo FROM CIDADE WHERE (nome ='Recife' AND uf='PE'))AND cidade_destino= (SELECT codigo FROM CIDADE WHERE (nome ='Fortaleza' AND uf='CE')))),(SELECT codigo FROM CARGA WHERE (nro_cte='12281' AND cod_contrato=(SELECT codigo FROM CONTRATO WHERE cod_cliente = (SELECT codigo FROM CLIENTE WHERE razao_social='Transportadora É Pra Ontem Ltda' )))))
 	;
