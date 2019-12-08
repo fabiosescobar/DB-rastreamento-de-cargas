@@ -1,5 +1,5 @@
-CREATE DATABASE G2CARGAS;
-USE G2CARGAS;
+CREATE DATABASE G2CARGAS_teste;
+USE G2CARGAS_teste;
 CREATE TABLE CLIENTE (
 	codigo INT PRIMARY KEY AUTO_INCREMENT,
 	razao_social VARCHAR(45) NOT NULL,
@@ -330,3 +330,75 @@ INSERT INTO ROTA_CARGA (cod_rota, cod_carga) VALUES
 	((SELECT codigo FROM ROTA WHERE (cidade_origem= (SELECT codigo FROM CIDADE WHERE (nome ='Recife' AND uf='PE'))AND cidade_destino= (SELECT codigo FROM CIDADE WHERE (nome ='salvador' AND uf='BA')))),(SELECT codigo FROM CARGA WHERE (nro_cte='12246' AND cod_contrato=(SELECT codigo FROM CONTRATO WHERE cod_cliente = (SELECT codigo FROM CLIENTE WHERE razao_social='Transportadora É Pra Ontem Ltda' ))))),
 	((SELECT codigo FROM ROTA WHERE (cidade_origem= (SELECT codigo FROM CIDADE WHERE (nome ='Recife' AND uf='PE'))AND cidade_destino= (SELECT codigo FROM CIDADE WHERE (nome ='Fortaleza' AND uf='CE')))),(SELECT codigo FROM CARGA WHERE (nro_cte='12281' AND cod_contrato=(SELECT codigo FROM CONTRATO WHERE cod_cliente = (SELECT codigo FROM CLIENTE WHERE razao_social='Transportadora É Pra Ontem Ltda' )))))
 	;
+
+
+	'- Três consultas usando subquery:'
+
+	'1- Qual é a cidade de destino do CTe 30111 ?'
+
+	SELECT nome as Destino_CTe_30111, uf FROM CIDADE WHERE codigo = (SELECT cidade_destino FROM ROTA WHERE codigo =
+		(SELECT cod_rota FROM ROTA_CARGA WHERE cod_carga= (SELECT codigo FROM CARGA WHERE nro_cte='30111')));
+	 
+	 '2- Qual é o motorista do CTe 30111 ?'
+
+	SELECT nome as Motorista_CTe_30111 FROM MOTORISTA WHERE codigo = (SELECT cod_motorista FROM MOTORISTA_CARGA WHERE cod_carga =
+		(SELECT codigo FROM CARGA WHERE nro_cte='30111'));
+	
+	'3- Qual o tempo de duracao previsto para o trajeto do CTe 30111 ?'
+
+	SELECT TIME_FORMAT(duracao, '%Hh %im') as Tempo_previsao_CTe_30111 FROM ROTA WHERE codigo = (SELECT cod_rota FROM ROTA_CARGA WHERE cod_carga =
+		(SELECT codigo FROM CARGA WHERE nro_cte='30111'));
+
+			
+
+	'- Três consultas usando JOIN'
+
+	'1: A qual cliente pertence o veículo placa TPL4471?'
+
+	SELECT CLIENTE.razao_social as Cliente_placa_TPL4471 FROM CLIENTE INNER JOIN CONTRATO ON CLIENTE.codigo = CONTRATO.cod_cliente
+	 INNER JOIN CARGA ON CONTRATO.codigo = CARGA.cod_contrato INNER JOIN VEICULO_CARGA ON CARGA.codigo = VEICULO_CARGA.cod_carga 
+	 INNER JOIN VEICULO ON VEICULO_CARGA.cod_veiculo=VEICULO.codigo WHERE (VEICULO.placa='TPL4471'); 
+
+	
+	
+	'2: Quais clientes enviaram cargas em 2018?'
+
+	SELECT CLIENTE.razao_social as Clientes_cargas_2018, CARGA.nro_cte FROM CLIENTE INNER JOIN CONTRATO ON CLIENTE.codigo = CONTRATO.cod_cliente
+	INNER JOIN CARGA ON CONTRATO.codigo = CARGA.cod_contrato INNER JOIN EVENTO_CARGA ON CARGA.codigo=EVENTO_CARGA.cod_carga
+	INNER JOIN EVENTO ON EVENTO_CARGA.cod_evento = EVENTO.codigo WHERE ((DATE(EVENTO.data_hora)>='2018-01-01' AND DATE(EVENTO.data_hora)<='2018-12-31') AND EVENTO.descricao='Início do percurso'); 
+
+
+	'3: Quais veículos já fizeram revisões?'
+
+	SELECT CLIENTE.razao_social, VEICULO.placa, REVISAO.data FROM CLIENTE INNER JOIN CONTRATO ON CLIENTE.codigo = CONTRATO.cod_cliente
+	 INNER JOIN CARGA ON CONTRATO.codigo = CARGA.cod_contrato INNER JOIN VEICULO_CARGA ON CARGA.codigo = VEICULO_CARGA.cod_carga 
+	 INNER JOIN VEICULO ON VEICULO_CARGA.cod_veiculo=VEICULO.codigo INNER JOIN REVISAO ON VEICULO.codigo = REVISAO.cod_veiculo WHERE   
+	 VEICULO.codigo IN (SELECT REVISAO.cod_veiculo FROM REVISAO);
+
+
+
+
+	'1- Quem dirigiu determinado veículo em determinada rota?'
+
+
+SELECT  CIDADE.nome as origem, (SELECT CIDADE.nome FROM CIDADE INNER JOIN ROTA ON CIDADE.codigo = ROTA.cidade_destino WHERE ROTA.codigo=(SELECT ROTA_CARGA.cod_rota FROM ROTA_CARGA WHERE ROTA_CARGA.cod_rota='12')) as destino,
+ MOTORISTA.nome, VEICULO.placa FROM MOTORISTA INNER JOIN MOTORISTA_CARGA ON MOTORISTA.codigo = MOTORISTA_CARGA.cod_motorista
+	 INNER JOIN VEICULO_CARGA ON VEICULO_CARGA.cod_carga = MOTORISTA_CARGA.cod_carga INNER JOIN VEICULO ON VEICULO_CARGA.cod_veiculo = VEICULO.codigo 
+	 INNER JOIN CIDADE INNER JOIN ROTA ON CIDADE.codigo = ROTA.cidade_origem WHERE (ROTA.codigo=(SELECT ROTA_CARGA.cod_rota FROM ROTA_CARGA WHERE ROTA_CARGA.cod_rota='12') AND
+	 VEICULO_CARGA.cod_carga=(SELECT ROTA_CARGA.cod_carga FROM ROTA_CARGA WHERE (ROTA_CARGA.cod_rota='12')) AND 
+	 MOTORISTA_CARGA.cod_carga=(SELECT VEICULO_CARGA.cod_carga FROM VEICULO_CARGA WHERE VEICULO_CARGA.cod_veiculo=(SELECT VEICULO.codigo FROM VEICULO WHERE VEICULO.placa='GVB8863')));
+
+	'2 - Qual era carga do cliente x ?'
+
+SELECT  CLIENTE.razao_social, CARGA.nro_cte as Docs_fiscais, CARGA.codigo as Codigo_carga FROM CLIENTE INNER JOIN CONTRATO ON CLIENTE.codigo = CONTRATO.cod_cliente
+INNER JOIN CARGA ON CARGA.cod_contrato = CONTRATO.codigo WHERE CLIENTE.razao_social = 'Ágata Transps e Logística SA';
+
+   
+	
+	'3 - Quais cidades de destino do motorista x ?'
+
+SELECT MOTORISTA.nome, CIDADE.nome, CIDADE.uf as Destino FROM MOTORISTA INNER JOIN MOTORISTA_CARGA ON MOTORISTA.codigo = MOTORISTA_CARGA.cod_motorista
+ INNER JOIN ROTA_CARGA ON MOTORISTA_CARGA.cod_carga = ROTA_CARGA.cod_carga
+  INNER JOIN ROTA ON ROTA_CARGA.cod_rota = ROTA.codigo INNER JOIN CIDADE ON ROTA.cidade_destino = CIDADE.codigo WHERE MOTORISTA.nome ='Juvêncio Fontana Barbosa';
+
+  de
